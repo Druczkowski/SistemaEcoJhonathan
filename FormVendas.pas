@@ -1,0 +1,148 @@
+unit FormVendas;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
+  FireDAC.Phys, FireDAC.Phys.FB, FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait;
+
+type
+  TTelaVenda = class(TForm)
+    GridItens: TStringGrid;
+    ButtonAdicionarItem: TButton;
+    ButtonSalvarVenda: TButton;
+    ButtonFecharVenda: TButton;
+    EditCliente: TEdit;
+    EditProduto: TEdit;
+    EditQtdade: TEdit;
+    EditTotalVenda: TEdit;
+    EditPreco: TEdit;
+    FDQuery1: TFDQuery;
+    FDConnection1: TFDConnection;
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonAdicionarItemClick(Sender: TObject);
+    procedure ButtonSalvarVendaClick(Sender: TObject);
+    procedure EditClienteExit(Sender: TObject);
+    procedure EditProdutoExit(Sender: TObject);
+    procedure EditClienteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TelaVenda: TTelaVenda;
+
+implementation
+
+{$R *.dfm}
+
+uses FormConsultaClientes;
+
+procedure TTelaVenda.ButtonAdicionarItemClick(Sender: TObject);
+var
+  Linha : Integer;
+  Preco : Double;
+  Qtd   : Double;
+  Total : Double;
+begin
+  Preco := StrToFloat(EditPreco.Text);
+  Qtd := StrToFloat(EditQtdade.Text);
+
+  Total := Preco * Qtd;
+
+  Linha := GridItens.RowCount;
+
+  GridItens.RowCount := GridItens.RowCount + 1;
+
+  GridItens.Cells[0,Linha] := EditProduto.Text;
+  GridItens.Cells[1,Linha] := EditQtdade.Text;
+  GridItens.Cells[2,Linha] := EditPreco.Text;
+  GridItens.Cells[3,Linha] := FloatToStr(Total);
+end;
+
+procedure TTelaVenda.ButtonSalvarVendaClick(Sender: TObject);
+begin
+  FDQuery1.SQL.Text :=
+  'INSERT INTO VENDAS (DATA, CLIENTE, TOTAL) VALUES (:DATA,:CLIENTE,:TOTAL)';
+
+  FDQuery1.ParamByName('DATA').AsDate := Date;
+  FDQuery1.ParamByName('CLIENTE').AsString := EditCliente.Text;
+  FDQuery1.ParamByName('TOTAL').AsFloat := 0;
+
+  FDQuery1.ExecSQL;
+end;
+
+procedure TTelaVenda.EditClienteExit(Sender: TObject);
+begin
+  FDQuery1.SQL.Text :=
+  'SELECT NOME FROM CLIENTES WHERE NOME = :NOME';
+
+  FDQuery1.ParamByName('NOME').AsString := EditCliente.Text;
+
+  FDQuery1.Open;
+
+  if not FDQuery1.IsEmpty then
+    EditCliente.Text := FDQuery1.FieldByName('NOME').AsString
+  else
+    ShowMessage('Cliente não encontrado');
+end;
+
+procedure TTelaVenda.EditClienteKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F2 then
+  begin
+
+    FormConsultaClientes := TFormConsultaClientes.Create(nil);
+
+    try
+      if FormConsultaClientes.ShowModal = mrOk then
+      begin
+        EditCliente.Text :=
+        FormConsultaClientes.FDQueryClientes.FieldByName('NOME').AsString;
+      end;
+    finally
+      FormConsultaClientes.Free;
+    end;
+
+  end;
+end;
+
+procedure TTelaVenda.EditProdutoExit(Sender: TObject);
+begin
+  FDQuery1.SQL.Text :=
+  'SELECT DESCRICAO, PRECO_VENDA FROM PRODUTOS WHERE DESCRICAO = :DESC';
+
+  FDQuery1.ParamByName('DESC').AsString := EditProduto.Text;
+
+  FDQuery1.Open;
+
+  if not FDQuery1.IsEmpty then
+  begin
+    EditProduto.Text := FDQuery1.FieldByName('DESCRICAO').AsString;
+    EditPreco.Text := FDQuery1.FieldByName('PRECO_VENDA').AsString;
+  end
+  else
+    ShowMessage('Produto não encontrado');
+end;
+
+procedure TTelaVenda.FormCreate(Sender: TObject);
+begin
+  GridItens.ColCount := 4;
+  GridItens.RowCount := 1;
+
+  GridItens.Cells[0,0] := 'Produto';
+  GridItens.Cells[1,0] := 'Qtd';
+  GridItens.Cells[2,0] := 'Preço';
+  GridItens.Cells[3,0] := 'Total';
+end;
+
+end.

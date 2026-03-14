@@ -1,0 +1,42 @@
+unit FormPrincipal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+
+type
+  TTelaPrincipal = class(TForm)
+    ButtonCadClientes: TButton;
+    ButtonCadProdutos: TButton;
+    ButtonVendas: TButton;
+    procedure ButtonCadClientesClick(Sender: TObject);
+    procedure ButtonCadProdutosClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TelaPrincipal: TTelaPrincipal;
+
+implementation
+
+{$R *.dfm}
+
+uses FormClientes, FormProdutos;//, FormVendas;
+
+procedure TTelaPrincipal.ButtonCadClientesClick(Sender: TObject);
+begin
+  TelaCadClientes.ShowModal;
+end;
+
+procedure TTelaPrincipal.ButtonCadProdutosClick(Sender: TObject);
+begin
+  TelaCadProdutos.ShowModal;
+end;
+
+end.

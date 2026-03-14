@@ -1,0 +1,26 @@
+unit FormProdutos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TTelaCadProdutos = class(TForm)
+    EditDescProd: TEdit;
+    LabelDescProd: TLabel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TelaCadProdutos: TTelaCadProdutos;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,95 @@
+object TelaCadProdutos: TTelaCadProdutos
+  Left = 0
+  Top = 0
+  Caption = 'Produtos'
+  ClientHeight = 441
+  ClientWidth = 624
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 15
+  object LabelDescProd: TLabel
+    Left = 40
+    Top = 27
+    Width = 54
+    Height = 15
+    Caption = 'Descri'#231#227'o:'
+  end
+  object LabelPrecoProd: TLabel
+    Left = 208
+    Top = 27
+    Width = 81
+    Height = 15
+    Caption = 'Pre'#231'o de Venda'
+  end
+  object LabelUnMedProd: TLabel
+    Left = 368
+    Top = 27
+    Width = 103
+    Height = 15
+    Caption = 'Unidade de Medida'
+  end
+  object EditDescProd: TEdit
+    Left = 40
+    Top = 48
+    Width = 121
+    Height = 23
+    TabOrder = 0
+  end
+  object EditPrecoProd: TEdit
+    Left = 208
+    Top = 48
+    Width = 121
+    Height = 23
+    TabOrder = 1
+  end
+  object EditUnMedProd: TEdit
+    Left = 368
+    Top = 48
+    Width = 121
+    Height = 23
+    TabOrder = 2
+  end
+  object ButtonSalvarProd: TButton
+    Left = 312
+    Top = 224
+    Width = 75
+    Height = 25
+    Caption = 'Salvar'
+    TabOrder = 3
+    OnClick = ButtonSalvarProdClick
+  end
+  object ButtonFecharProd: TButton
+    Left = 464
+    Top = 224
+    Width = 75
+    Height = 25
+    Caption = 'Fechar'
+    TabOrder = 4
+    OnClick = ButtonFecharProdClick
+  end
+  object FDQuery1: TFDQuery
+    Connection = FDConnection1
+    SQL.Strings = (
+      'select * from produtos')
+    Left = 192
+    Top = 240
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'DriverID=FB'
+      
+        'Database=C:\Users\Druczkowski\Documents\Sistema Venda Eco\BD\VEN' +
+        'DASECOJ.FDB'
+      'Password=masterkey'
+      'User_Name=sysdba'
+      'Server=localhost'
+      'OSAuthent=No')
+    LoginPrompt = False
+    Left = 272
+    Top = 304
+  end
+end
