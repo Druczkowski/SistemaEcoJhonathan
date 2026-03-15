@@ -12,9 +12,16 @@ type
     ButtonCadClientes: TButton;
     ButtonCadProdutos: TButton;
     ButtonVendas: TButton;
+    ButtonConsultaCli: TButton;
+    ButtonConsultaProd: TButton;
+    ButtonConsultaVenda: TButton;
+    Label1: TLabel;
     procedure ButtonCadClientesClick(Sender: TObject);
     procedure ButtonCadProdutosClick(Sender: TObject);
     procedure ButtonVendasClick(Sender: TObject);
+    procedure ButtonConsultaCliClick(Sender: TObject);
+    procedure ButtonConsultaProdClick(Sender: TObject);
+    procedure ButtonConsultaVendaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -28,7 +35,8 @@ implementation
 
 {$R *.dfm}
 
-uses FormClientes, FormProdutos, FormVendas;
+uses FormClientes, FormProdutos, FormVendas, FormConsultaClientes,
+    FormConsultaProdutos, FormConsultaVendas;
 
 procedure TTelaPrincipal.ButtonCadClientesClick(Sender: TObject);
 begin
@@ -38,6 +46,23 @@ end;
 procedure TTelaPrincipal.ButtonCadProdutosClick(Sender: TObject);
 begin
   TelaCadProdutos.ShowModal;
+end;
+
+procedure TTelaPrincipal.ButtonConsultaCliClick(Sender: TObject);
+begin
+  TelaConsultaCliente.PermitirEdicao := True;
+  TelaConsultaCliente.ShowModal;
+end;
+
+procedure TTelaPrincipal.ButtonConsultaProdClick(Sender: TObject);
+begin
+  TelaConsultaProduto.PermitirEdicao := True;
+  TelaConsultaProduto.ShowModal;
+end;
+
+procedure TTelaPrincipal.ButtonConsultaVendaClick(Sender: TObject);
+begin
+  TelaConsultaVendas.ShowModal;
 end;
 
 procedure TTelaPrincipal.ButtonVendasClick(Sender: TObject);

@@ -47,7 +47,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     procedure CalcularTotal;
-    procedure Consultar;
+    procedure ConsultarCliente;
     procedure LimparTela;
   public
     { Public declarations }
@@ -80,11 +80,12 @@ begin
 
 end;
 
-procedure TTelaVenda.Consultar;
+procedure TTelaVenda.ConsultarCliente;
 
 begin
 
   TelaConsultaCliente  := TTelaConsultaCliente.Create(nil);
+  TelaConsultaCliente.PermitirEdicao := False;
 
   try
     if TelaConsultaCliente.ShowModal = mrOk then
@@ -256,14 +257,14 @@ procedure TTelaVenda.EditClienteIDKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_F2 then
-    Consultar;
+    ConsultarCliente;
 end;
 
 procedure TTelaVenda.EditClienteKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_F2 then
-    Consultar;
+    ConsultarCliente;
 end;
 
 procedure TTelaVenda.EditProdutoExit(Sender: TObject);
@@ -293,6 +294,7 @@ begin
   begin
 
     TelaConsultaProduto := TTelaConsultaProduto.Create(nil);
+    TelaConsultaProduto.PermitirEdicao := False;
 
     try
       if TelaConsultaProduto.ShowModal = mrOk then

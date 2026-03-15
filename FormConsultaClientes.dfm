@@ -26,6 +26,30 @@ object TelaConsultaCliente: TTelaConsultaCliente
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
     OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NOME'
+        Title.Caption = 'Nome Cliente'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DOCUMENTO'
+        Title.Caption = 'Documento '
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CIDADE'
+        Title.Caption = 'Cidade'
+        Visible = True
+      end>
   end
   object FDQueryClientes: TFDQuery
     Connection = FDConnection1

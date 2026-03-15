@@ -26,6 +26,31 @@ object TelaConsultaProduto: TTelaConsultaProduto
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
     OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Caption = 'ID Produto'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DESCRICAO'
+        Title.Caption = 'Descri'#231#227'o'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PRECO_VENDA'
+        Title.Caption = 'Pre'#231'o Venda'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'UNIDADE'
+        Title.Caption = 'Unidade de Medida'
+        Visible = True
+      end>
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -37,6 +62,7 @@ object TelaConsultaProduto: TTelaConsultaProduto
       'User_Name=sysdba'
       'Server=localhost'
       'OSAuthent=No')
+    Connected = True
     LoginPrompt = False
     Left = 136
     Top = 336
