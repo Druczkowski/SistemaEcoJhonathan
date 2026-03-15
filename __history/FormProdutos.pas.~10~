@@ -1,0 +1,99 @@
+unit FormProdutos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys,
+  FireDAC.Phys.FB, FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait, Data.DB,
+  FireDAC.Comp.Client, FireDAC.Comp.DataSet;
+
+type
+  TTelaCadProdutos = class(TForm)
+    EditDescProd: TEdit;
+    LabelDescProd: TLabel;
+    LabelPrecoProd: TLabel;
+    LabelUnMedProd: TLabel;
+    EditPrecoProd: TEdit;
+    EditUnMedProd: TEdit;
+    ButtonSalvarProd: TButton;
+    ButtonFecharProd: TButton;
+    FDQuery1: TFDQuery;
+    FDConnection1: TFDConnection;
+    procedure ButtonSalvarProdClick(Sender: TObject);
+    procedure ButtonFecharProdClick(Sender: TObject);
+    procedure EditPrecoProdExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TelaCadProdutos: TTelaCadProdutos;
+
+implementation
+
+{$R *.dfm}
+
+procedure TTelaCadProdutos.ButtonFecharProdClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TTelaCadProdutos.ButtonSalvarProdClick(Sender: TObject);
+begin
+  if EditDescProd.Text = '' then
+  begin
+    ShowMessage('Informe o nome do Produto');
+    EditDescProd.SetFocus;
+    Exit;
+  end;
+
+  if EditPrecoProd.Text = '' then
+  begin
+    ShowMessage('Informe o Preço de Venda');
+    EditPrecoProd.SetFocus;
+    Exit;
+  end;
+
+  if EditUnMedProd.Text = '' then
+  begin
+    ShowMessage('Informe a Unidade de medida');
+    EditUnMedProd.SetFocus;
+    Exit;
+  end;
+
+  FDQuery1.SQL.Clear;
+  FDQuery1.SQL.Add('INSERT INTO PRODUTOS (DESCRICAO, PRECO_VENDA, UNIDADE)');
+  FDQuery1.SQL.Add('VALUES (:DESCRICAO,:PRECO,:UNIDADE)');
+
+  FDQuery1.ParamByName('DESCRICAO').AsString := EditDescProd.Text;
+  FDQuery1.ParamByName('PRECO').AsFloat  := StrToCurr(EditPrecoProd.Text);
+  FDQuery1.ParamByName('UNIDADE').AsString := EditUnMedProd.Text;
+
+  FDQuery1.ExecSQL;
+
+  ShowMessage('Produto salvo!');
+
+  EditDescProd.Text := '';
+  EditPrecoProd.Text := '';
+  EditUnMedProd.Text := '';
+  EditDescProd.SetFocus;
+end;
+
+procedure TTelaCadProdutos.EditPrecoProdExit(Sender: TObject);
+var
+  Valor : Currency;
+begin
+  if EditPrecoProd.Text <> '' then
+  begin
+    Valor := StrToCurr(EditPrecoProd.Text);
+    EditPrecoProd.Text := FormatFloat('0.00', Valor);
+  end;
+end;
+
+end.

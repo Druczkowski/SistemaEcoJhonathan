@@ -61,7 +61,7 @@ implementation
 {$R *.dfm}
 
 
-uses FormConsultaClientes, FormConsultaProdutos;
+uses FormConsultaClientes, FormConsultaProdutos, FormConsultaVendas;
 
 procedure TTelaVenda.CalcularTotal;
 var
@@ -232,6 +232,13 @@ begin
 
   ShowMessage('Venda salva com sucesso. Número da venda: ' + IntToStr(VendaID));
   LimparTela;
+
+  if Assigned(TelaConsultaVendas) then
+  begin
+    TelaConsultaVendas.FDQueryVendas.Close;
+    TelaConsultaVendas.FDQueryVendas.Open;
+  end;
+
   close;
 
 

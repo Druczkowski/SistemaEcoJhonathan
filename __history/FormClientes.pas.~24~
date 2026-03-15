@@ -1,0 +1,232 @@
+unit FormClientes;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys,
+  FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client, FireDAC.Comp.DataSet,
+  FireDAC.Phys.FB, FireDAC.Phys.FBDef;
+
+  function ValidarCPF(CPF: string): Boolean;
+  function ValidarCNPJ(CPF: string): Boolean;
+
+type
+  TTelaCadClientes = class(TForm)
+    EditNomeCliente: TEdit;
+    LabelNomeCliente: TLabel;
+    EditDocumento: TEdit;
+    EditCidade: TEdit;
+    LabelDocumento: TLabel;
+    LabelCidade: TLabel;
+    ButtonSalvarCli: TButton;
+    FDQuery1: TFDQuery;
+    FDConnection1: TFDConnection;
+    ButtonFecharCli: TButton;
+    ComboBoxPFPJ: TComboBox;
+    Label1: TLabel;
+    procedure ButtonSalvarCliClick(Sender: TObject);
+    procedure ButtonFecharCliClick(Sender: TObject);
+    procedure ComboBoxPFPJChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TelaCadClientes: TTelaCadClientes;
+
+implementation
+
+{$R *.dfm}
+
+uses FormConsultaClientes;
+
+
+
+procedure TTelaCadClientes.ButtonFecharCliClick(Sender: TObject);
+begin
+  EditNomeCliente.Text := '';
+  EditDocumento.Text := '';
+  EditCidade.Text := '';
+  Close;
+end;
+
+procedure TTelaCadClientes.ButtonSalvarCliClick(Sender: TObject);
+begin
+  if EditNomeCliente.Text = '' then
+  begin
+    ShowMessage('Informe o nome');
+    EditNomeCliente.SetFocus;
+    Exit;
+  end;
+
+  if EditDocumento.Text = '' then
+  begin
+    ShowMessage('Informe o documento');
+    EditDocumento.SetFocus;
+    Exit;
+  end;
+
+  if EditCidade.Text = '' then
+  begin
+    ShowMessage('Informe a cidade');
+    EditCidade.SetFocus;
+    Exit;
+  end;
+
+  if ComboboxPFPJ.Text = 'PF' then
+  begin
+    if not ValidarCPF(EditDocumento.Text) then
+    begin
+      ShowMessage('CPF inválido!');
+      EditDocumento.SetFocus;
+      Exit;
+    end;
+  end;
+
+  if ComboboxPFPJ.Text = 'PJ' then
+  begin
+    if not ValidarCNPJ(EditDocumento.Text) then
+    begin
+      ShowMessage('CNPJ inválido!');
+      EditDocumento.SetFocus;
+      Exit;
+    end;
+  end;
+
+  FDQuery1.Close;
+  FDQuery1.SQL.Text := 'SELECT ID FROM CLIENTES WHERE DOCUMENTO = :DOCUMENTO';
+  FDQuery1.ParamByName('DOCUMENTO').AsString := EditDocumento.Text;
+  FDQuery1.Open;
+
+  if not FDQuery1.IsEmpty then
+  begin
+    if MessageDlg('Documento já cadastrado. Deseja continuar mesmo assim?',
+       mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+       Exit;
+  end;
+
+  FDQuery1.SQL.Clear;
+  FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE)');
+  FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE)');
+
+  FDQuery1.ParamByName('NOME').AsString := EditNomeCliente.Text;
+  FDQuery1.ParamByName('DOCUMENTO').AsString := EditDocumento.Text;
+  FDQuery1.ParamByName('CIDADE').AsString := EditCidade.Text;
+
+  FDQuery1.ExecSQL;
+
+  ShowMessage('Cliente salvo!');
+
+  if Assigned(TelaConsultaCliente) then
+  begin
+    TelaConsultaCliente.FDQueryClientes.Close;
+    TelaConsultaCliente.FDQueryClientes.Open;
+  end;
+
+  EditNomeCliente.Text := '';
+  EditDocumento.Text := '';
+  EditCidade.Text := '';
+  EditNomeCliente.SetFocus;
+end;
+
+procedure TTelaCadClientes.ComboBoxPFPJChange(Sender: TObject);
+begin
+  if ComboboxPFPJ.Text = 'PF' then
+  LabelDocumento.Caption := 'CPF:';
+
+if ComboboxPFPJ.Text = 'PJ' then
+  LabelDocumento.Caption := 'CNPJ:';
+
+if ComboboxPFPJ.Text = 'EXTERIOR' then
+  LabelDocumento.Caption := 'Documento:';
+end;
+
+function ValidarCNPJ(CNPJ: string): Boolean;
+var
+  i, Soma, Resto: Integer;
+  Num: string;
+  Peso1, Peso2: array[1..13] of Integer;
+begin
+  Result := False;
+
+  Num := StringReplace(CNPJ,'.','',[rfReplaceAll]);
+  Num := StringReplace(Num,'-','',[rfReplaceAll]);
+  Num := StringReplace(Num,'/','',[rfReplaceAll]);
+
+  if Length(Num) <> 14 then Exit;
+
+  Peso1[1] := 5; Peso1[2] := 4; Peso1[3] := 3; Peso1[4] := 2;
+  Peso1[5] := 9; Peso1[6] := 8; Peso1[7] := 7; Peso1[8] := 6;
+  Peso1[9] := 5; Peso1[10] := 4; Peso1[11] := 3; Peso1[12] := 2;
+
+  Soma := 0;
+  for i := 1 to 12 do
+    Soma := Soma + StrToInt(Num[i]) * Peso1[i];
+
+  Resto := Soma mod 11;
+  if Resto < 2 then
+    Resto := 0
+  else
+    Resto := 11 - Resto;
+
+  if Resto <> StrToInt(Num[13]) then Exit;
+
+  Peso2[1] := 6; Peso2[2] := 5; Peso2[3] := 4; Peso2[4] := 3;
+  Peso2[5] := 2; Peso2[6] := 9; Peso2[7] := 8; Peso2[8] := 7;
+  Peso2[9] := 6; Peso2[10] := 5; Peso2[11] := 4; Peso2[12] := 3;
+  Peso2[13] := 2;
+
+  Soma := 0;
+  for i := 1 to 13 do
+    Soma := Soma + StrToInt(Num[i]) * Peso2[i];
+
+  Resto := Soma mod 11;
+  if Resto < 2 then
+    Resto := 0
+  else
+    Resto := 11 - Resto;
+
+  if Resto <> StrToInt(Num[14]) then Exit;
+
+  Result := True;
+end;
+
+function ValidarCPF(CPF: string): Boolean;
+var
+  i, Soma, Resto: Integer;
+  Num: string;
+begin
+  Result := False;
+
+  Num := StringReplace(CPF,'.','',[rfReplaceAll]);
+  Num := StringReplace(Num,'-','',[rfReplaceAll]);
+
+  if Length(Num) <> 11 then Exit;
+
+  Soma := 0;
+  for i := 1 to 9 do
+    Soma := Soma + StrToInt(Num[i]) * (11 - i);
+
+  Resto := (Soma * 10) mod 11;
+  if Resto = 10 then Resto := 0;
+
+  if Resto <> StrToInt(Num[10]) then Exit;
+
+  Soma := 0;
+  for i := 1 to 10 do
+    Soma := Soma + StrToInt(Num[i]) * (12 - i);
+
+  Resto := (Soma * 10) mod 11;
+  if Resto = 10 then Resto := 0;
+
+  if Resto <> StrToInt(Num[11]) then Exit;
+
+  Result := True;
+end;
+end.

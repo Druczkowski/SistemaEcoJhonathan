@@ -39,8 +39,13 @@ implementation
 
 {$R *.dfm}
 
+uses FormConsultaProdutos;
+
 procedure TTelaCadProdutos.ButtonFecharProdClick(Sender: TObject);
 begin
+  EditDescProd.Text := '';
+  EditPrecoProd.Text := '';
+  EditUnMedProd.Text := '';
   Close;
 end;
 
@@ -79,6 +84,12 @@ begin
 
   ShowMessage('Produto salvo!');
 
+  if Assigned(TelaConsultaProduto) then
+  begin
+    TelaConsultaProduto.FDQueryProdutos.Close;
+    TelaConsultaProduto.FDQueryProdutos.Open;
+  end;
+
   EditDescProd.Text := '';
   EditPrecoProd.Text := '';
   EditUnMedProd.Text := '';
@@ -88,7 +99,16 @@ end;
 procedure TTelaCadProdutos.EditPrecoProdExit(Sender: TObject);
 var
   Valor : Currency;
+  SONUMEROS: Double;
 begin
+  if not TryStrToFloat(EditPrecoProd.Text, SONUMEROS) then
+  begin
+    ShowMessage('Digite apenas números no valor.');
+    EditPrecoProd.Text := '';
+    EditPrecoProd.SetFocus;
+    Exit;
+  end;
+
   if EditPrecoProd.Text <> '' then
   begin
     Valor := StrToCurr(EditPrecoProd.Text);

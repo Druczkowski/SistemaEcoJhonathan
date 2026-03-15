@@ -20,7 +20,7 @@ object TelaCadClientes: TTelaCadClientes
     Caption = 'Nome:'
   end
   object LabelDocumento: TLabel
-    Left = 200
+    Left = 250
     Top = 43
     Width = 66
     Height = 15
@@ -33,6 +33,13 @@ object TelaCadClientes: TTelaCadClientes
     Height = 15
     Caption = 'Cidade:'
   end
+  object Label1: TLabel
+    Left = 169
+    Top = 43
+    Width = 26
+    Height = 15
+    Caption = 'Tipo:'
+  end
   object EditNomeCliente: TEdit
     Left = 32
     Top = 64
@@ -41,7 +48,7 @@ object TelaCadClientes: TTelaCadClientes
     TabOrder = 0
   end
   object EditDocumento: TEdit
-    Left = 200
+    Left = 250
     Top = 64
     Width = 121
     Height = 23
@@ -71,6 +78,18 @@ object TelaCadClientes: TTelaCadClientes
     Caption = 'Fechar'
     TabOrder = 4
     OnClick = ButtonFecharCliClick
+  end
+  object ComboBoxPFPJ: TComboBox
+    Left = 169
+    Top = 64
+    Width = 73
+    Height = 23
+    TabOrder = 5
+    OnChange = ComboBoxPFPJChange
+    Items.Strings = (
+      'PF'
+      'PJ'
+      'EXTERIOR')
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1
