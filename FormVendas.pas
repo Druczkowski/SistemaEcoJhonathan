@@ -42,8 +42,13 @@ type
       Shift: TShiftState);
     procedure ButtonFecharVendaClick(Sender: TObject);
     procedure ButtonRemoverItemClick(Sender: TObject);
+    procedure EditClienteIDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     procedure CalcularTotal;
+    procedure Consultar;
+    procedure LimparTela;
   public
     { Public declarations }
   end;
@@ -71,8 +76,50 @@ begin
     Total := Total + StrToFloat(GridItens.Cells[4,i]);
   end;
 
-  EditTotalVenda.Text := FloatToStr(Total);
+  EditTotalVenda.Text := FormatFloat('0.00', Total);
 
+end;
+
+procedure TTelaVenda.Consultar;
+
+begin
+
+  TelaConsultaCliente  := TTelaConsultaCliente.Create(nil);
+
+  try
+    if TelaConsultaCliente.ShowModal = mrOk then
+    begin
+      EditCliente.Text :=
+      TelaConsultaCliente.FDQueryClientes.FieldByName('NOME').AsString;
+
+      EditClienteID.Text :=
+      TelaConsultaCliente.FDQueryClientes.FieldByName('ID').AsString;
+    end;
+  finally
+    TelaConsultaCliente.Free;
+
+  end;
+
+end;
+
+procedure TTelaVenda.LimparTela;
+var
+  i: Integer;
+
+begin
+  EditClienteID.Clear;
+  EditCliente.Clear;
+  EditTotalVenda.Clear;
+  EditProduto.Clear;
+  EditQtdade.Clear;
+  EditPreco.Clear;
+
+  for i := 1 to GridItens.RowCount - 1 do
+    GridItens.Rows[i].Clear;
+
+  GridItens.RowCount := 1;
+
+  FDQuery1.Close;
 end;
 
 
@@ -83,6 +130,12 @@ var
   Qtd   : Double;
   Total : Double;
 begin
+  if EditQtdade.Text = '' then
+  begin
+    ShowMessage('Informe a quantidade');
+    Exit;
+  end;
+
   Preco := StrToFloat(EditPreco.Text);
   Qtd := StrToFloat(EditQtdade.Text);
 
@@ -108,6 +161,7 @@ end;
 
 procedure TTelaVenda.ButtonFecharVendaClick(Sender: TObject);
 begin
+  LimparTela;
   Close;
 end;
 
@@ -131,6 +185,14 @@ end;
 
 procedure TTelaVenda.ButtonSalvarVendaClick(Sender: TObject);
 begin
+
+  if GridItens.RowCount = 0 then
+  begin
+    ShowMessage('Adicione itens para finalizar a venda');
+    Exit;
+  end;
+
+
   FDQuery1.SQL.Text :=
   'INSERT INTO VENDAS (DATA, CLIENTE_ID, VALOR_TOTAL) VALUES (:DATA,:CLIENTE_ID,:VALOR_TOTAL)';
 
@@ -168,6 +230,7 @@ begin
 
 
   ShowMessage('Venda salva com sucesso. Número da venda: ' + IntToStr(VendaID));
+  LimparTela;
   close;
 
 
@@ -189,28 +252,18 @@ begin
     ShowMessage('Cliente não encontrado');
 end;
 
+procedure TTelaVenda.EditClienteIDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F2 then
+    Consultar;
+end;
+
 procedure TTelaVenda.EditClienteKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_F2 then
-  begin
-
-    TelaConsultaCliente  := TTelaConsultaCliente.Create(nil);
-
-    try
-      if TelaConsultaCliente.ShowModal = mrOk then
-      begin
-        EditCliente.Text :=
-        TelaConsultaCliente.FDQueryClientes.FieldByName('NOME').AsString;
-
-        EditClienteID.Text :=
-        TelaConsultaCliente.FDQueryClientes.FieldByName('ID').AsString;
-      end;
-    finally
-      TelaConsultaCliente.Free;
-    end;
-
-  end;
+    Consultar;
 end;
 
 procedure TTelaVenda.EditProdutoExit(Sender: TObject);
@@ -233,6 +286,8 @@ end;
 
 procedure TTelaVenda.EditProdutoKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+var
+  Valor : Currency;
 begin
   if Key = VK_F2 then
   begin
@@ -245,8 +300,9 @@ begin
         EditProduto.Text :=
         TelaConsultaProduto.FDQueryProdutos.FieldByName('DESCRICAO').AsString;
 
-        EditPreco.Text :=
-        TelaConsultaProduto.FDQueryProdutos.FieldByName('PRECO_VENDA').AsString;
+        Valor := StrToCurr(TelaConsultaProduto.FDQueryProdutos.FieldByName('PRECO_VENDA').AsString);
+        EditPreco.Text := FormatFloat('0.00', Valor);
+
 
         EditProduto.Tag :=
         TelaConsultaProduto.FDQueryProdutos.FieldByName('ID').AsInteger;
@@ -256,6 +312,11 @@ begin
     end;
 
   end;
+end;
+
+procedure TTelaVenda.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  LimparTela;
 end;
 
 procedure TTelaVenda.FormCreate(Sender: TObject);

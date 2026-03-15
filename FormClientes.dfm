@@ -1,9 +1,10 @@
 object TelaCadClientes: TTelaCadClientes
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Clientes'
-  ClientHeight = 441
-  ClientWidth = 624
+  ClientHeight = 163
+  ClientWidth = 538
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -54,8 +55,8 @@ object TelaCadClientes: TTelaCadClientes
     TabOrder = 2
   end
   object ButtonSalvarCli: TButton
-    Left = 349
-    Top = 152
+    Left = 325
+    Top = 104
     Width = 75
     Height = 25
     Caption = 'Salvar'
@@ -63,8 +64,8 @@ object TelaCadClientes: TTelaCadClientes
     OnClick = ButtonSalvarCliClick
   end
   object ButtonFecharCli: TButton
-    Left = 456
-    Top = 152
+    Left = 430
+    Top = 104
     Width = 75
     Height = 25
     Caption = 'Fechar'
@@ -75,8 +76,8 @@ object TelaCadClientes: TTelaCadClientes
     Connection = FDConnection1
     SQL.Strings = (
       'select * from clientes')
-    Left = 192
-    Top = 240
+    Left = 32
+    Top = 104
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -89,7 +90,7 @@ object TelaCadClientes: TTelaCadClientes
       'Server=localhost'
       'OSAuthent=No')
     LoginPrompt = False
-    Left = 272
-    Top = 304
+    Left = 96
+    Top = 104
   end
 end

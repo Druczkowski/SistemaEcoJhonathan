@@ -1,9 +1,10 @@
 object TelaCadProdutos: TTelaCadProdutos
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Produtos'
-  ClientHeight = 441
-  ClientWidth = 624
+  ClientHeight = 150
+  ClientWidth = 497
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -45,6 +46,7 @@ object TelaCadProdutos: TTelaCadProdutos
     Width = 121
     Height = 23
     TabOrder = 1
+    OnExit = EditPrecoProdExit
   end
   object EditUnMedProd: TEdit
     Left = 368
@@ -54,8 +56,8 @@ object TelaCadProdutos: TTelaCadProdutos
     TabOrder = 2
   end
   object ButtonSalvarProd: TButton
-    Left = 312
-    Top = 224
+    Left = 318
+    Top = 104
     Width = 75
     Height = 25
     Caption = 'Salvar'
@@ -63,8 +65,8 @@ object TelaCadProdutos: TTelaCadProdutos
     OnClick = ButtonSalvarProdClick
   end
   object ButtonFecharProd: TButton
-    Left = 464
-    Top = 224
+    Left = 414
+    Top = 104
     Width = 75
     Height = 25
     Caption = 'Fechar'
@@ -75,8 +77,8 @@ object TelaCadProdutos: TTelaCadProdutos
     Connection = FDConnection1
     SQL.Strings = (
       'select * from produtos')
-    Left = 192
-    Top = 240
+    Left = 32
+    Top = 88
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -89,7 +91,7 @@ object TelaCadProdutos: TTelaCadProdutos
       'Server=localhost'
       'OSAuthent=No')
     LoginPrompt = False
-    Left = 272
-    Top = 304
+    Left = 112
+    Top = 96
   end
 end

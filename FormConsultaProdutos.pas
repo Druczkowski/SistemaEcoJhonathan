@@ -40,6 +40,7 @@ end;
 procedure TTelaConsultaProduto.FormShow(Sender: TObject);
 begin
   FDQueryProdutos.Open;
+  DBGrid1.Columns[1].Width := 150;
 end;
 
 end.

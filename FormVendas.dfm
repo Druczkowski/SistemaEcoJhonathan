@@ -10,6 +10,7 @@ object TelaVenda: TTelaVenda
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OnClose = FormClose
   OnCreate = FormCreate
   TextHeight = 15
   object Label1: TLabel
@@ -133,6 +134,7 @@ object TelaVenda: TTelaVenda
     Width = 25
     Height = 23
     TabOrder = 10
+    OnKeyDown = EditClienteIDKeyDown
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1

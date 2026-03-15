@@ -1,9 +1,10 @@
 object TelaPrincipal: TTelaPrincipal
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Inicio'
-  ClientHeight = 441
-  ClientWidth = 624
+  ClientHeight = 210
+  ClientWidth = 331
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

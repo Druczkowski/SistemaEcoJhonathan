@@ -1,6 +1,7 @@
 object TelaConsultaCliente: TTelaConsultaCliente
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Consultar Cliente'
   ClientHeight = 441
   ClientWidth = 624
@@ -50,6 +51,7 @@ object TelaConsultaCliente: TTelaConsultaCliente
       'User_Name=sysdba'
       'Server=localhost'
       'OSAuthent=No')
+    Connected = True
     LoginPrompt = False
     Left = 136
     Top = 336

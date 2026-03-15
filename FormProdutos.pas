@@ -25,6 +25,7 @@ type
     FDConnection1: TFDConnection;
     procedure ButtonSalvarProdClick(Sender: TObject);
     procedure ButtonFecharProdClick(Sender: TObject);
+    procedure EditPrecoProdExit(Sender: TObject);
   private
     { Private declarations }
   public
@@ -71,7 +72,7 @@ begin
   FDQuery1.SQL.Add('VALUES (:DESCRICAO,:PRECO,:UNIDADE)');
 
   FDQuery1.ParamByName('DESCRICAO').AsString := EditDescProd.Text;
-  FDQuery1.ParamByName('PRECO').AsString := EditPrecoProd.Text;
+  FDQuery1.ParamByName('PRECO').AsFloat  := StrToCurr(EditPrecoProd.Text);
   FDQuery1.ParamByName('UNIDADE').AsString := EditUnMedProd.Text;
 
   FDQuery1.ExecSQL;
@@ -82,6 +83,17 @@ begin
   EditPrecoProd.Text := '';
   EditUnMedProd.Text := '';
   EditDescProd.SetFocus;
+end;
+
+procedure TTelaCadProdutos.EditPrecoProdExit(Sender: TObject);
+var
+  Valor : Currency;
+begin
+  if EditPrecoProd.Text <> '' then
+  begin
+    Valor := StrToCurr(EditPrecoProd.Text);
+    EditPrecoProd.Text := FormatFloat('0.00', Valor);
+  end;
 end;
 
 end.
