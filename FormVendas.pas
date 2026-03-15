@@ -24,6 +24,13 @@ type
     EditPreco: TEdit;
     FDQuery1: TFDQuery;
     FDConnection1: TFDConnection;
+    Label1: TLabel;
+    Label2: TLabel;
+    ButtonRemoverItem: TButton;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    EditClienteID: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure ButtonAdicionarItemClick(Sender: TObject);
     procedure ButtonSalvarVendaClick(Sender: TObject);
@@ -31,8 +38,12 @@ type
     procedure EditProdutoExit(Sender: TObject);
     procedure EditClienteKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure EditProdutoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ButtonFecharVendaClick(Sender: TObject);
+    procedure ButtonRemoverItemClick(Sender: TObject);
   private
-    { Private declarations }
+    procedure CalcularTotal;
   public
     { Public declarations }
   end;
@@ -44,7 +55,26 @@ implementation
 
 {$R *.dfm}
 
-uses FormConsultaClientes;
+
+uses FormConsultaClientes, FormConsultaProdutos;
+
+procedure TTelaVenda.CalcularTotal;
+var
+  i : Integer;
+  Total : Double;
+begin
+
+  Total := 0;
+
+  for i := 1 to GridItens.RowCount - 1 do
+  begin
+    Total := Total + StrToFloat(GridItens.Cells[4,i]);
+  end;
+
+  EditTotalVenda.Text := FloatToStr(Total);
+
+end;
+
 
 procedure TTelaVenda.ButtonAdicionarItemClick(Sender: TObject);
 var
@@ -62,22 +92,86 @@ begin
 
   GridItens.RowCount := GridItens.RowCount + 1;
 
-  GridItens.Cells[0,Linha] := EditProduto.Text;
-  GridItens.Cells[1,Linha] := EditQtdade.Text;
-  GridItens.Cells[2,Linha] := EditPreco.Text;
-  GridItens.Cells[3,Linha] := FloatToStr(Total);
+  GridItens.Cells[0,Linha] := IntToStr(EditProduto.Tag);
+  GridItens.Cells[1,Linha] := EditProduto.Text;
+  GridItens.Cells[2,Linha] := EditQtdade.Text;
+  GridItens.Cells[3,Linha] := EditPreco.Text;
+  GridItens.Cells[4,Linha] := FloatToStr(Total);
+
+  CalcularTotal;
+
+  EditProduto.Text := '';
+  EditQtdade.Text  := '';
+  EditPreco.Text   := '';
+
+end;
+
+procedure TTelaVenda.ButtonFecharVendaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TTelaVenda.ButtonRemoverItemClick(Sender: TObject);
+  var
+  Linha : Integer;
+  i : Integer;
+begin
+
+  Linha := GridItens.Row;
+
+  for i := Linha to GridItens.RowCount - 2 do
+  begin
+    GridItens.Rows[i] := GridItens.Rows[i+1];
+  end;
+
+  GridItens.RowCount := GridItens.RowCount - 1;
+
+  CalcularTotal;
 end;
 
 procedure TTelaVenda.ButtonSalvarVendaClick(Sender: TObject);
 begin
   FDQuery1.SQL.Text :=
-  'INSERT INTO VENDAS (DATA, CLIENTE, TOTAL) VALUES (:DATA,:CLIENTE,:TOTAL)';
+  'INSERT INTO VENDAS (DATA, CLIENTE_ID, VALOR_TOTAL) VALUES (:DATA,:CLIENTE_ID,:VALOR_TOTAL)';
 
   FDQuery1.ParamByName('DATA').AsDate := Date;
-  FDQuery1.ParamByName('CLIENTE').AsString := EditCliente.Text;
-  FDQuery1.ParamByName('TOTAL').AsFloat := 0;
+  FDQuery1.ParamByName('CLIENTE_ID').AsString := EditClienteID.Text;
+  FDQuery1.ParamByName('VALOR_TOTAL').AsFloat := StrToFloat(EditTotalVenda.Text);
 
   FDQuery1.ExecSQL;
+
+  FDQuery1.SQL.Text := 'SELECT MAX(ID) ID FROM VENDAS';
+  FDQuery1.Open;
+
+  var VendaID : Integer;
+
+  VendaID := FDQuery1.FieldByName('ID').AsInteger;
+
+  var
+  i: Integer;
+
+  for i := 1 to GridItens.RowCount - 1 do
+  begin
+
+    FDQuery1.SQL.Text :=
+    'INSERT INTO VENDAS_ITENS (VENDA_ID, PRODUTO_ID, QUANTIDADE, PRECO, TOTAL) '+
+    'VALUES (:VENDA,:PRODUTO,:QTD,:PRECO,:TOTAL)';
+
+    FDQuery1.ParamByName('VENDA').AsInteger := VendaID;
+    FDQuery1.ParamByName('PRODUTO').AsInteger := StrToInt(GridItens.Cells[0,i]);
+    FDQuery1.ParamByName('QTD').AsFloat := StrToFloat(GridItens.Cells[2,i]);
+    FDQuery1.ParamByName('PRECO').AsFloat := StrToFloat(GridItens.Cells[3,i]);
+    FDQuery1.ParamByName('TOTAL').AsFloat := StrToFloat(GridItens.Cells[4,i]);
+
+    FDQuery1.ExecSQL;
+  end;
+
+
+  ShowMessage('Venda salva com sucesso. Número da venda: ' + IntToStr(VendaID));
+  close;
+
+
+
 end;
 
 procedure TTelaVenda.EditClienteExit(Sender: TObject);
@@ -108,6 +202,9 @@ begin
       begin
         EditCliente.Text :=
         TelaConsultaCliente.FDQueryClientes.FieldByName('NOME').AsString;
+
+        EditClienteID.Text :=
+        TelaConsultaCliente.FDQueryClientes.FieldByName('ID').AsString;
       end;
     finally
       TelaConsultaCliente.Free;
@@ -134,15 +231,45 @@ begin
     ShowMessage('Produto não encontrado');
 end;
 
+procedure TTelaVenda.EditProdutoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F2 then
+  begin
+
+    TelaConsultaProduto := TTelaConsultaProduto.Create(nil);
+
+    try
+      if TelaConsultaProduto.ShowModal = mrOk then
+      begin
+        EditProduto.Text :=
+        TelaConsultaProduto.FDQueryProdutos.FieldByName('DESCRICAO').AsString;
+
+        EditPreco.Text :=
+        TelaConsultaProduto.FDQueryProdutos.FieldByName('PRECO_VENDA').AsString;
+
+        EditProduto.Tag :=
+        TelaConsultaProduto.FDQueryProdutos.FieldByName('ID').AsInteger;
+      end;
+    finally
+      TelaConsultaProduto.Free;
+    end;
+
+  end;
+end;
+
 procedure TTelaVenda.FormCreate(Sender: TObject);
 begin
-  GridItens.ColCount := 4;
+  GridItens.ColCount := 5;
   GridItens.RowCount := 1;
 
-  GridItens.Cells[0,0] := 'Produto';
-  GridItens.Cells[1,0] := 'Qtd';
-  GridItens.Cells[2,0] := 'Preço';
-  GridItens.Cells[3,0] := 'Total';
+  GridItens.Cells[0,0] := 'ID';
+  GridItens.Cells[1,0] := 'Produto';
+  GridItens.Cells[2,0] := 'Qtd';
+  GridItens.Cells[3,0] := 'Preço';
+  GridItens.Cells[4,0] := 'Total';
 end;
+
+
 
 end.

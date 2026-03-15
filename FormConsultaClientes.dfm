@@ -12,21 +12,13 @@ object TelaConsultaCliente: TTelaConsultaCliente
   Font.Style = []
   OnShow = FormShow
   TextHeight = 15
-  object Edit1: TEdit
-    Left = 104
-    Top = 80
-    Width = 121
-    Height = 23
-    TabOrder = 0
-    Text = 'Edit1'
-  end
   object DBGrid1: TDBGrid
-    Left = 200
-    Top = 200
-    Width = 320
-    Height = 120
+    Left = 0
+    Top = 8
+    Width = 625
+    Height = 433
     DataSource = DataSource1
-    TabOrder = 1
+    TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -12

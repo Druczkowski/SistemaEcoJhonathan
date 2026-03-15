@@ -5,7 +5,8 @@ uses
   FormPrincipal in 'FormPrincipal.pas' {TelaPrincipal},
   FormClientes in 'FormClientes.pas' {TelaCadClientes},
   FormProdutos in 'FormProdutos.pas' {TelaCadProdutos},
-  FormVendas in 'FormVendas.pas' {TelaVenda};
+  FormVendas in 'FormVendas.pas' {TelaVenda},
+  FormConsultaClientes in 'FormConsultaClientes.pas' {TelaConsultaCliente};
 
 {$R *.res}
 
@@ -16,5 +17,6 @@ begin
   Application.CreateForm(TTelaCadClientes, TelaCadClientes);
   Application.CreateForm(TTelaCadProdutos, TelaCadProdutos);
   Application.CreateForm(TTelaVenda, TelaVenda);
+  Application.CreateForm(TTelaConsultaCliente, TelaConsultaCliente);
   Application.Run;
 end.

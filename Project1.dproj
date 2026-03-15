@@ -141,6 +141,10 @@
             <Form>TelaVenda</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="FormConsultaClientes.pas">
+            <Form>TelaConsultaCliente</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -13,7 +13,6 @@ uses
 
 type
   TTelaConsultaCliente = class(TForm)
-    Edit1: TEdit;
     DBGrid1: TDBGrid;
     FDQueryClientes: TFDQuery;
     DataSource1: TDataSource;
