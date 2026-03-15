@@ -1,6 +1,7 @@
 object TelaVenda: TTelaVenda
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Venda'
   ClientHeight = 441
   ClientWidth = 624

@@ -90,7 +90,7 @@ object TelaCadClientes: TTelaCadClientes
       'Server=localhost'
       'OSAuthent=No')
     LoginPrompt = False
-    Left = 96
+    Left = 120
     Top = 104
   end
 end

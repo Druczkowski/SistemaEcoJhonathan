@@ -66,6 +66,18 @@ begin
     Exit;
   end;
 
+  FDQuery1.Close;
+  FDQuery1.SQL.Text := 'SELECT ID FROM CLIENTES WHERE DOCUMENTO = :DOCUMENTO';
+  FDQuery1.ParamByName('DOCUMENTO').AsString := EditDocumento.Text;
+  FDQuery1.Open;
+
+  if not FDQuery1.IsEmpty then
+  begin
+    if MessageDlg('Documento já cadastrado. Deseja continuar mesmo assim?',
+       mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+       Exit;
+  end;
+
   FDQuery1.SQL.Clear;
   FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE)');
   FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE)');
