@@ -101,16 +101,16 @@ begin
   if Key = VK_F2 then
   begin
 
-    TelaConsultaCliente  := TTelaConsultaCliente.Create(nil);
+    FormConsultaClientes := TFormConsultaClientes.Create(nil);
 
     try
-      if TelaConsultaCliente.ShowModal = mrOk then
+      if FormConsultaClientes.ShowModal = mrOk then
       begin
         EditCliente.Text :=
-        TelaConsultaCliente.FDQueryClientes.FieldByName('NOME').AsString;
+        FormConsultaClientes.FDQueryClientes.FieldByName('NOME').AsString;
       end;
     finally
-      TelaConsultaCliente.Free;
+      FormConsultaClientes.Free;
     end;
 
   end;
