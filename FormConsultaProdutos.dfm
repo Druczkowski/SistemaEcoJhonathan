@@ -1,6 +1,7 @@
 object TelaConsultaProduto: TTelaConsultaProduto
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Consultar Produto'
   ClientHeight = 441
   ClientWidth = 624
