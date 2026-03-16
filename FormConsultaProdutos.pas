@@ -17,6 +17,10 @@ type
     FDQueryProdutos: TFDQuery;
     DataSource1: TDataSource;
     DBGrid1: TDBGrid;
+    FDQueryProdutosID: TIntegerField;
+    FDQueryProdutosDESCRICAO: TStringField;
+    FDQueryProdutosPRECO_VENDA: TFMTBCDField;
+    FDQueryProdutosUNIDADE: TStringField;
     procedure FormShow(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
   private

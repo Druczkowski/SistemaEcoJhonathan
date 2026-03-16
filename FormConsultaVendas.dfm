@@ -94,6 +94,7 @@ object TelaConsultaVendas: TTelaConsultaVendas
         Expanded = False
         FieldName = 'PRECO'
         Title.Caption = 'Pre'#231'o'
+        Width = 64
         Visible = True
       end>
   end
@@ -110,6 +111,31 @@ object TelaConsultaVendas: TTelaConsultaVendas
       'ORDER BY V.ID DESC')
     Left = 280
     Top = 80
+    object FDQueryVendasID: TIntegerField
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDQueryVendasDATA: TDateField
+      FieldName = 'DATA'
+      Origin = '"DATA"'
+    end
+    object FDQueryVendasCLIENTE: TStringField
+      AutoGenerateValue = arDefault
+      FieldName = 'CLIENTE'
+      Origin = 'NOME'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 100
+    end
+    object FDQueryVendasVALOR_TOTAL: TFMTBCDField
+      FieldName = 'VALOR_TOTAL'
+      Origin = 'VALOR_TOTAL'
+      DisplayFormat = 'R$ #,##0.00'
+      Precision = 18
+      Size = 2
+    end
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -147,6 +173,37 @@ object TelaConsultaVendas: TTelaConsultaVendas
         ParamType = ptInput
         Value = Null
       end>
+    object FDQueryItensID: TIntegerField
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDQueryItensVENDA_ID: TIntegerField
+      FieldName = 'VENDA_ID'
+      Origin = 'VENDA_ID'
+    end
+    object FDQueryItensPRODUTO: TStringField
+      AutoGenerateValue = arDefault
+      FieldName = 'PRODUTO'
+      Origin = 'DESCRICAO'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 100
+    end
+    object FDQueryItensQUANTIDADE: TFMTBCDField
+      FieldName = 'QUANTIDADE'
+      Origin = 'QUANTIDADE'
+      Precision = 18
+      Size = 2
+    end
+    object FDQueryItensPRECO: TFMTBCDField
+      FieldName = 'PRECO'
+      Origin = 'PRECO'
+      DisplayFormat = 'R$ #,##0.00'
+      Precision = 18
+      Size = 2
+    end
   end
   object FDConnection2: TFDConnection
     Params.Strings = (

@@ -75,6 +75,29 @@ object TelaConsultaProduto: TTelaConsultaProduto
       'ORDER BY DESCRICAO')
     Left = 240
     Top = 328
+    object FDQueryProdutosID: TIntegerField
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDQueryProdutosDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Origin = 'DESCRICAO'
+      Size = 100
+    end
+    object FDQueryProdutosPRECO_VENDA: TFMTBCDField
+      FieldName = 'PRECO_VENDA'
+      Origin = 'PRECO_VENDA'
+      DisplayFormat = 'R$ #,##0.00'
+      Precision = 18
+      Size = 2
+    end
+    object FDQueryProdutosUNIDADE: TStringField
+      FieldName = 'UNIDADE'
+      Origin = 'UNIDADE'
+      Size = 10
+    end
   end
   object DataSource1: TDataSource
     DataSet = FDQueryProdutos

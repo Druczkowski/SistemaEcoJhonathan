@@ -31,6 +31,7 @@ type
     procedure ButtonSalvarCliClick(Sender: TObject);
     procedure ButtonFecharCliClick(Sender: TObject);
     procedure ComboBoxPFPJChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -228,6 +229,11 @@ if ComboboxPFPJ.Text = 'PJ' then
 
 if ComboboxPFPJ.Text = 'EXTERIOR' then
   LabelDocumento.Caption := 'Documento:';
+end;
+
+procedure TTelaCadClientes.FormShow(Sender: TObject);
+begin
+  ComboBoxPFPJ.ItemIndex := 0;
 end;
 
 end.

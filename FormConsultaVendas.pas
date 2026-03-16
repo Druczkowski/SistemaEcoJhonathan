@@ -21,6 +21,15 @@ type
     FDConnection2: TFDConnection;
     DataSourceVendas: TDataSource;
     DataSourceItens: TDataSource;
+    FDQueryVendasID: TIntegerField;
+    FDQueryVendasDATA: TDateField;
+    FDQueryVendasCLIENTE: TStringField;
+    FDQueryVendasVALOR_TOTAL: TFMTBCDField;
+    FDQueryItensID: TIntegerField;
+    FDQueryItensVENDA_ID: TIntegerField;
+    FDQueryItensPRODUTO: TStringField;
+    FDQueryItensQUANTIDADE: TFMTBCDField;
+    FDQueryItensPRECO: TFMTBCDField;
     procedure DBGrid1CellClick(Column: TColumn);
     procedure FormShow(Sender: TObject);
   private
