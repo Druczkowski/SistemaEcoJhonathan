@@ -1,6 +1,7 @@
 object TelaVenda: TTelaVenda
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Venda'
   ClientHeight = 441
   ClientWidth = 624
@@ -10,7 +11,10 @@ object TelaVenda: TTelaVenda
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
+  OnClose = FormClose
   OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
   TextHeight = 15
   object Label1: TLabel
     Left = 16
@@ -25,6 +29,27 @@ object TelaVenda: TTelaVenda
     Width = 43
     Height = 15
     Caption = 'Produto'
+  end
+  object Label3: TLabel
+    Left = 150
+    Top = 418
+    Width = 60
+    Height = 15
+    Caption = 'Total Venda'
+  end
+  object Label4: TLabel
+    Left = 192
+    Top = 67
+    Width = 65
+    Height = 15
+    Caption = 'Quantidade:'
+  end
+  object Label5: TLabel
+    Left = 383
+    Top = 67
+    Width = 33
+    Height = 15
+    Caption = 'Pre'#231'o:'
   end
   object GridItens: TStringGrid
     Left = 8
@@ -61,7 +86,7 @@ object TelaVenda: TTelaVenda
     OnClick = ButtonFecharVendaClick
   end
   object EditCliente: TEdit
-    Left = 59
+    Left = 96
     Top = 21
     Width = 121
     Height = 23
@@ -77,12 +102,11 @@ object TelaVenda: TTelaVenda
     OnKeyDown = EditProdutoKeyDown
   end
   object EditQtdade: TEdit
-    Left = 232
+    Left = 264
     Top = 64
-    Width = 121
+    Width = 89
     Height = 23
     TabOrder = 6
-    Text = 'EditQtdade'
   end
   object EditTotalVenda: TEdit
     Left = 216
@@ -90,15 +114,13 @@ object TelaVenda: TTelaVenda
     Width = 121
     Height = 23
     TabOrder = 7
-    Text = 'EditTotalVenda'
   end
   object EditPreco: TEdit
-    Left = 368
+    Left = 430
     Top = 64
-    Width = 121
+    Width = 81
     Height = 23
     TabOrder = 8
-    Text = 'EditPreco'
   end
   object ButtonRemoverItem: TButton
     Left = 16
@@ -108,6 +130,14 @@ object TelaVenda: TTelaVenda
     Caption = 'Remover Item'
     TabOrder = 9
     OnClick = ButtonRemoverItemClick
+  end
+  object EditClienteID: TEdit
+    Left = 65
+    Top = 21
+    Width = 25
+    Height = 23
+    TabOrder = 10
+    OnKeyDown = EditClienteIDKeyDown
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1

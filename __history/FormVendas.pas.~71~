@@ -31,6 +31,7 @@ type
     Label4: TLabel;
     Label5: TLabel;
     EditClienteID: TEdit;
+    EditProdutoNome: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure ButtonAdicionarItemClick(Sender: TObject);
     procedure ButtonSalvarVendaClick(Sender: TObject);
@@ -45,6 +46,7 @@ type
     procedure EditClienteIDKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     procedure CalcularTotal;
     procedure ConsultarCliente;
@@ -61,7 +63,7 @@ implementation
 {$R *.dfm}
 
 
-uses FormConsultaClientes, FormConsultaProdutos;
+uses FormConsultaClientes, FormConsultaProdutos, FormConsultaVendas;
 
 procedure TTelaVenda.CalcularTotal;
 var
@@ -84,7 +86,11 @@ procedure TTelaVenda.ConsultarCliente;
 
 begin
 
+  EditCliente.Clear;
+  EditClienteID.Clear;
+
   TelaConsultaCliente  := TTelaConsultaCliente.Create(nil);
+  TelaConsultaCliente.PermitirEdicao := False;
 
   try
     if TelaConsultaCliente.ShowModal = mrOk then
@@ -231,6 +237,13 @@ begin
 
   ShowMessage('Venda salva com sucesso. Número da venda: ' + IntToStr(VendaID));
   LimparTela;
+
+  if Assigned(TelaConsultaVendas) then
+  begin
+    TelaConsultaVendas.FDQueryVendas.Close;
+    TelaConsultaVendas.FDQueryVendas.Open;
+  end;
+
   close;
 
 
@@ -293,11 +306,12 @@ begin
   begin
 
     TelaConsultaProduto := TTelaConsultaProduto.Create(nil);
+    TelaConsultaProduto.PermitirEdicao := False;
 
     try
       if TelaConsultaProduto.ShowModal = mrOk then
       begin
-        EditProduto.Text :=
+        EditProdutoNome.Text :=
         TelaConsultaProduto.FDQueryProdutos.FieldByName('DESCRICAO').AsString;
 
         Valor := StrToCurr(TelaConsultaProduto.FDQueryProdutos.FieldByName('PRECO_VENDA').AsString);
@@ -306,6 +320,9 @@ begin
 
         EditProduto.Tag :=
         TelaConsultaProduto.FDQueryProdutos.FieldByName('ID').AsInteger;
+
+        EditProduto.Text :=
+        IntToStr(TelaConsultaProduto.FDQueryProdutos.FieldByName('ID').AsInteger);
       end;
     finally
       TelaConsultaProduto.Free;
@@ -332,5 +349,15 @@ begin
 end;
 
 
+
+procedure TTelaVenda.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    LimparTela;
+    Close;
+  end;
+end;
 
 end.

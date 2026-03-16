@@ -44,9 +44,11 @@ type
     procedure ButtonRemoverItemClick(Sender: TObject);
     procedure EditClienteIDKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     procedure CalcularTotal;
-    procedure Consultar;
+    procedure ConsultarCliente;
     procedure LimparTela;
   public
     { Public declarations }
@@ -60,7 +62,7 @@ implementation
 {$R *.dfm}
 
 
-uses FormConsultaClientes, FormConsultaProdutos;
+uses FormConsultaClientes, FormConsultaProdutos, FormConsultaVendas;
 
 procedure TTelaVenda.CalcularTotal;
 var
@@ -79,11 +81,15 @@ begin
 
 end;
 
-procedure TTelaVenda.Consultar;
+procedure TTelaVenda.ConsultarCliente;
 
 begin
 
+  EditCliente.Clear;
+  EditClienteID.Clear;
+
   TelaConsultaCliente  := TTelaConsultaCliente.Create(nil);
+  TelaConsultaCliente.PermitirEdicao := False;
 
   try
     if TelaConsultaCliente.ShowModal = mrOk then
@@ -230,6 +236,13 @@ begin
 
   ShowMessage('Venda salva com sucesso. Número da venda: ' + IntToStr(VendaID));
   LimparTela;
+
+  if Assigned(TelaConsultaVendas) then
+  begin
+    TelaConsultaVendas.FDQueryVendas.Close;
+    TelaConsultaVendas.FDQueryVendas.Open;
+  end;
+
   close;
 
 
@@ -255,14 +268,14 @@ procedure TTelaVenda.EditClienteIDKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_F2 then
-    Consultar;
+    ConsultarCliente;
 end;
 
 procedure TTelaVenda.EditClienteKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_F2 then
-    Consultar;
+    ConsultarCliente;
 end;
 
 procedure TTelaVenda.EditProdutoExit(Sender: TObject);
@@ -292,6 +305,7 @@ begin
   begin
 
     TelaConsultaProduto := TTelaConsultaProduto.Create(nil);
+    TelaConsultaProduto.PermitirEdicao := False;
 
     try
       if TelaConsultaProduto.ShowModal = mrOk then
@@ -313,6 +327,11 @@ begin
   end;
 end;
 
+procedure TTelaVenda.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  LimparTela;
+end;
+
 procedure TTelaVenda.FormCreate(Sender: TObject);
 begin
   GridItens.ColCount := 5;
@@ -326,5 +345,15 @@ begin
 end;
 
 
+
+procedure TTelaVenda.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    LimparTela;
+    Close;
+  end;
+end;
 
 end.

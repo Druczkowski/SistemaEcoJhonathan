@@ -38,7 +38,7 @@ object TelaVenda: TTelaVenda
     Caption = 'Total Venda'
   end
   object Label4: TLabel
-    Left = 192
+    Left = 228
     Top = 67
     Width = 65
     Height = 15
@@ -88,23 +88,24 @@ object TelaVenda: TTelaVenda
   object EditCliente: TEdit
     Left = 96
     Top = 21
-    Width = 121
+    Width = 126
     Height = 23
+    Enabled = False
     TabOrder = 4
     OnKeyDown = EditClienteKeyDown
   end
   object EditProduto: TEdit
     Left = 65
     Top = 64
-    Width = 121
+    Width = 25
     Height = 23
     TabOrder = 5
     OnKeyDown = EditProdutoKeyDown
   end
   object EditQtdade: TEdit
-    Left = 264
+    Left = 300
     Top = 64
-    Width = 89
+    Width = 75
     Height = 23
     TabOrder = 6
   end
@@ -113,6 +114,7 @@ object TelaVenda: TTelaVenda
     Top = 410
     Width = 121
     Height = 23
+    Enabled = False
     TabOrder = 7
   end
   object EditPreco: TEdit
@@ -120,6 +122,7 @@ object TelaVenda: TTelaVenda
     Top = 64
     Width = 81
     Height = 23
+    Enabled = False
     TabOrder = 8
   end
   object ButtonRemoverItem: TButton
@@ -138,6 +141,15 @@ object TelaVenda: TTelaVenda
     Height = 23
     TabOrder = 10
     OnKeyDown = EditClienteIDKeyDown
+  end
+  object EditProdutoNome: TEdit
+    Left = 96
+    Top = 64
+    Width = 126
+    Height = 23
+    Enabled = False
+    TabOrder = 11
+    OnKeyDown = EditProdutoKeyDown
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1

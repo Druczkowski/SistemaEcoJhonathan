@@ -31,6 +31,7 @@ type
     Label4: TLabel;
     Label5: TLabel;
     EditClienteID: TEdit;
+    EditProdutoNome: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure ButtonAdicionarItemClick(Sender: TObject);
     procedure ButtonSalvarVendaClick(Sender: TObject);
@@ -151,7 +152,7 @@ begin
   GridItens.RowCount := GridItens.RowCount + 1;
 
   GridItens.Cells[0,Linha] := IntToStr(EditProduto.Tag);
-  GridItens.Cells[1,Linha] := EditProduto.Text;
+  GridItens.Cells[1,Linha] := EditProdutoNome.Text;
   GridItens.Cells[2,Linha] := EditQtdade.Text;
   GridItens.Cells[3,Linha] := EditPreco.Text;
   GridItens.Cells[4,Linha] := FloatToStr(Total);
@@ -310,7 +311,7 @@ begin
     try
       if TelaConsultaProduto.ShowModal = mrOk then
       begin
-        EditProduto.Text :=
+        EditProdutoNome.Text :=
         TelaConsultaProduto.FDQueryProdutos.FieldByName('DESCRICAO').AsString;
 
         Valor := StrToCurr(TelaConsultaProduto.FDQueryProdutos.FieldByName('PRECO_VENDA').AsString);
@@ -319,6 +320,9 @@ begin
 
         EditProduto.Tag :=
         TelaConsultaProduto.FDQueryProdutos.FieldByName('ID').AsInteger;
+
+        EditProduto.Text :=
+        IntToStr(TelaConsultaProduto.FDQueryProdutos.FieldByName('ID').AsInteger);
       end;
     finally
       TelaConsultaProduto.Free;
