@@ -19,8 +19,6 @@ begin
   Application.CreateForm(TTelaCadClientes, TelaCadClientes);
   Application.CreateForm(TTelaCadProdutos, TelaCadProdutos);
   Application.CreateForm(TTelaVenda, TelaVenda);
-  Application.CreateForm(TTelaConsultaCliente, TelaConsultaCliente);
-  Application.CreateForm(TTelaConsultaProduto, TelaConsultaProduto);
   Application.CreateForm(TTelaConsultaVendas, TelaConsultaVendas);
   Application.Run;
 end.

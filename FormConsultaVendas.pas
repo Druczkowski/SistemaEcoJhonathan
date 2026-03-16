@@ -32,6 +32,7 @@ type
     FDQueryItensPRECO: TFMTBCDField;
     procedure DBGrid1CellClick(Column: TColumn);
     procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -51,6 +52,13 @@ begin
   FDQueryItens.ParamByName('ID_VENDA').AsInteger :=
     FDQueryVendas.FieldByName('ID').AsInteger;
   FDQueryItens.Open;
+end;
+
+procedure TTelaConsultaVendas.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
 end;
 
 procedure TTelaConsultaVendas.FormShow(Sender: TObject);

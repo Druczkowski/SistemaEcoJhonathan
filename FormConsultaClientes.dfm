@@ -11,6 +11,9 @@ object TelaConsultaCliente: TTelaConsultaCliente
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
+  OnClose = FormClose
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   TextHeight = 15
   object DBGrid1: TDBGrid

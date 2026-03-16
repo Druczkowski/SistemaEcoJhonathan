@@ -11,6 +11,8 @@ object TelaCadProdutos: TTelaCadProdutos
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
+  OnKeyDown = FormKeyDown
   TextHeight = 15
   object LabelDescProd: TLabel
     Left = 40

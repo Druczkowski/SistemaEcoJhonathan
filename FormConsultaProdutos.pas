@@ -23,6 +23,7 @@ type
     FDQueryProdutosUNIDADE: TStringField;
     procedure FormShow(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -39,6 +40,13 @@ implementation
 procedure TTelaConsultaProduto.DBGrid1DblClick(Sender: TObject);
 begin
   ModalResult := mrOk;
+end;
+
+procedure TTelaConsultaProduto.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
 end;
 
 procedure TTelaConsultaProduto.FormShow(Sender: TObject);

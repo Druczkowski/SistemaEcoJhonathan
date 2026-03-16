@@ -11,6 +11,8 @@ object TelaCadClientes: TTelaCadClientes
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   TextHeight = 15
   object LabelNomeCliente: TLabel

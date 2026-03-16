@@ -11,6 +11,8 @@ object TelaConsultaVendas: TTelaConsultaVendas
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   TextHeight = 15
   object DBGrid1: TDBGrid
@@ -94,7 +96,6 @@ object TelaConsultaVendas: TTelaConsultaVendas
         Expanded = False
         FieldName = 'PRECO'
         Title.Caption = 'Pre'#231'o'
-        Width = 64
         Visible = True
       end>
   end

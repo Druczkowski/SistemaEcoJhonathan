@@ -32,6 +32,7 @@ type
     procedure ButtonFecharCliClick(Sender: TObject);
     procedure ComboBoxPFPJChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -229,6 +230,18 @@ if ComboboxPFPJ.Text = 'PJ' then
 
 if ComboboxPFPJ.Text = 'EXTERIOR' then
   LabelDocumento.Caption := 'Documento:';
+end;
+
+procedure TTelaCadClientes.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    begin
+      EditNomeCliente.Text := '';
+      EditDocumento.Text := '';
+      EditCidade.Text := '';
+      Close;
+    end;
 end;
 
 procedure TTelaCadClientes.FormShow(Sender: TObject);

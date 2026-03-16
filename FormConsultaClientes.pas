@@ -19,6 +19,8 @@ type
     FDConnection1: TFDConnection;
     procedure FormShow(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -35,6 +37,20 @@ implementation
 procedure TTelaConsultaCliente.DBGrid1DblClick(Sender: TObject);
 begin
    ModalResult := mrOk;
+end;
+
+procedure TTelaConsultaCliente.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  if ModalResult = mrNone then
+    ModalResult := mrCancel;
+end;
+
+procedure TTelaConsultaCliente.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
 end;
 
 procedure TTelaConsultaCliente.FormShow(Sender: TObject);

@@ -11,8 +11,10 @@ object TelaVenda: TTelaVenda
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
   OnClose = FormClose
   OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
   TextHeight = 15
   object Label1: TLabel
     Left = 16

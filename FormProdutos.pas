@@ -26,6 +26,7 @@ type
     procedure ButtonSalvarProdClick(Sender: TObject);
     procedure ButtonFecharProdClick(Sender: TObject);
     procedure EditPrecoProdExit(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -113,6 +114,18 @@ begin
   begin
     Valor := StrToCurr(EditPrecoProd.Text);
     EditPrecoProd.Text := FormatFloat('0.00', Valor);
+  end;
+end;
+
+procedure TTelaCadProdutos.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    EditDescProd.Text := '';
+    EditPrecoProd.Text := '';
+    EditUnMedProd.Text := '';
+    Close;
   end;
 end;
 

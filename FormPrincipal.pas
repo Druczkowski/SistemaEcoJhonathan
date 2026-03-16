@@ -50,14 +50,24 @@ end;
 
 procedure TTelaPrincipal.ButtonConsultaCliClick(Sender: TObject);
 begin
-  TelaConsultaCliente.PermitirEdicao := True;
-  TelaConsultaCliente.ShowModal;
+  with TTelaConsultaCliente.Create(nil) do
+  try
+    PermitirEdicao := True;
+    ShowModal;
+  finally
+    Free;
+  end;
 end;
 
 procedure TTelaPrincipal.ButtonConsultaProdClick(Sender: TObject);
 begin
-  TelaConsultaProduto.PermitirEdicao := True;
-  TelaConsultaProduto.ShowModal;
+  with TTelaConsultaProduto.Create(nil) do
+  try
+    PermitirEdicao := True;
+    ShowModal;
+  finally
+    Free;
+  end;
 end;
 
 procedure TTelaPrincipal.ButtonConsultaVendaClick(Sender: TObject);

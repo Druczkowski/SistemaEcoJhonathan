@@ -45,6 +45,7 @@ type
     procedure EditClienteIDKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     procedure CalcularTotal;
     procedure ConsultarCliente;
@@ -83,6 +84,9 @@ end;
 procedure TTelaVenda.ConsultarCliente;
 
 begin
+
+  EditCliente.Clear;
+  EditClienteID.Clear;
 
   TelaConsultaCliente  := TTelaConsultaCliente.Create(nil);
   TelaConsultaCliente.PermitirEdicao := False;
@@ -341,5 +345,15 @@ begin
 end;
 
 
+
+procedure TTelaVenda.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    LimparTela;
+    Close;
+  end;
+end;
 
 end.
