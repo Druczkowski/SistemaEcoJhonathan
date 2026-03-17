@@ -33,6 +33,7 @@ type
     procedure DBGrid1CellClick(Column: TColumn);
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DBGrid1DblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -46,12 +47,21 @@ implementation
 
 {$R *.dfm}
 
+uses FormVendas;
+
 procedure TTelaConsultaVendas.DBGrid1CellClick(Column: TColumn);
 begin
   FDQueryItens.Close;
   FDQueryItens.ParamByName('ID_VENDA').AsInteger :=
     FDQueryVendas.FieldByName('ID').AsInteger;
   FDQueryItens.Open;
+end;
+
+procedure TTelaConsultaVendas.DBGrid1DblClick(Sender: TObject);
+begin
+  TelaVenda := TTelaVenda.Create(nil);
+  TelaVenda.IDVenda  := FDQueryVendas.FieldByName('ID').AsInteger;
+  TelaVenda.ShowModal;
 end;
 
 procedure TTelaConsultaVendas.FormKeyDown(Sender: TObject; var Key: Word;

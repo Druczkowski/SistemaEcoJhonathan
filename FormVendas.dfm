@@ -15,6 +15,7 @@ object TelaVenda: TTelaVenda
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   TextHeight = 15
   object Label1: TLabel
     Left = 16
@@ -50,6 +51,14 @@ object TelaVenda: TTelaVenda
     Width = 33
     Height = 15
     Caption = 'Pre'#231'o:'
+  end
+  object LabelCodVenda: TLabel
+    Left = 401
+    Top = 24
+    Width = 77
+    Height = 15
+    Caption = 'Codigo Venda:'
+    Visible = False
   end
   object GridItens: TStringGrid
     Left = 8
@@ -150,6 +159,14 @@ object TelaVenda: TTelaVenda
     Enabled = False
     TabOrder = 11
     OnKeyDown = EditProdutoKeyDown
+  end
+  object EditCodigoVenda: TEdit
+    Left = 488
+    Top = 16
+    Width = 129
+    Height = 28
+    TabOrder = 12
+    Visible = False
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1

@@ -32,6 +32,8 @@ type
     Label5: TLabel;
     EditClienteID: TEdit;
     EditProdutoNome: TEdit;
+    EditCodigoVenda: TEdit;
+    LabelCodVenda: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure ButtonAdicionarItemClick(Sender: TObject);
     procedure ButtonSalvarVendaClick(Sender: TObject);
@@ -47,12 +49,13 @@ type
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     procedure CalcularTotal;
     procedure ConsultarCliente;
     procedure LimparTela;
   public
-    { Public declarations }
+    IDVenda: Integer;
   end;
 
 var
@@ -190,14 +193,18 @@ begin
 end;
 
 procedure TTelaVenda.ButtonSalvarVendaClick(Sender: TObject);
-begin
-
+var
+  VendaID : Integer;
+  i : Integer;
+Begin
   if GridItens.RowCount = 0 then
   begin
     ShowMessage('Adicione itens para finalizar a venda');
     Exit;
   end;
 
+  if IDVenda = 0 then
+  begin
 
   FDQuery1.SQL.Text :=
   'INSERT INTO VENDAS (DATA, CLIENTE_ID, VALOR_TOTAL) VALUES (:DATA,:CLIENTE_ID,:VALOR_TOTAL)';
@@ -211,12 +218,32 @@ begin
   FDQuery1.SQL.Text := 'SELECT MAX(ID) ID FROM VENDAS';
   FDQuery1.Open;
 
-  var VendaID : Integer;
-
   VendaID := FDQuery1.FieldByName('ID').AsInteger;
 
-  var
-  i: Integer;
+  end
+  else
+  begin
+     VendaID := IDVenda;
+
+    FDQuery1.SQL.Text :=
+      'UPDATE VENDAS SET '+
+      'CLIENTE_ID = :CLIENTE_ID, '+
+      'VALOR_TOTAL = :VALOR_TOTAL '+
+      'WHERE ID = :ID';
+
+    FDQuery1.ParamByName('CLIENTE_ID').AsInteger := StrToInt(EditClienteID.Text);
+    FDQuery1.ParamByName('VALOR_TOTAL').AsFloat := StrToFloat(EditTotalVenda.Text);
+    FDQuery1.ParamByName('ID').AsInteger := IDVenda;
+
+    FDQuery1.ExecSQL;
+
+    //remove itens antigos
+    FDQuery1.SQL.Text :=
+      'DELETE FROM VENDAS_ITENS WHERE VENDA_ID = :ID';
+
+    FDQuery1.ParamByName('ID').AsInteger := IDVenda;
+    FDQuery1.ExecSQL;
+  end;
 
   for i := 1 to GridItens.RowCount - 1 do
   begin
@@ -245,8 +272,6 @@ begin
   end;
 
   close;
-
-
 
 end;
 
@@ -358,6 +383,85 @@ begin
     LimparTela;
     Close;
   end;
+end;
+
+procedure TTelaVenda.FormShow(Sender: TObject);
+var
+  Linha: Integer;
+
+begin
+  if IDVenda <> 0 then
+  begin
+    //CARREGAR DADOS DA VENDA
+
+    LabelCodVenda.Visible := True;
+    EditCodigoVenda.Visible := True;
+    EditCodigoVenda.Text := IntToStr(IDVenda);
+
+
+    FDQuery1.Close;
+    FDQuery1.SQL.Text :=
+      'SELECT V.CLIENTE_ID, C.NOME, V.VALOR_TOTAL '+
+      'FROM VENDAS V '+
+      'LEFT JOIN CLIENTES C ON C.ID = V.CLIENTE_ID '+
+      'WHERE V.ID = :ID';
+
+    FDQuery1.ParamByName('ID').AsInteger := IDVenda;
+    FDQuery1.Open;
+
+    EditClienteID.Text :=
+      FDQuery1.FieldByName('CLIENTE_ID').AsString;
+
+    EditCliente.Text :=
+      FDQuery1.FieldByName('NOME').AsString;
+
+    EditTotalVenda.Text :=
+      FormatFloat('0.00',
+      FDQuery1.FieldByName('VALOR_TOTAL').AsFloat);
+
+
+    //CARREGAR ITENS DA VENDA
+
+    FDQuery1.Close;
+    FDQuery1.SQL.Text :=
+      'SELECT I.PRODUTO_ID, P.DESCRICAO, I.QUANTIDADE, I.PRECO, I.TOTAL '+
+      'FROM VENDAS_ITENS I '+
+      'LEFT JOIN PRODUTOS P ON P.ID = I.PRODUTO_ID '+
+      'WHERE I.VENDA_ID = :ID';
+
+    FDQuery1.ParamByName('ID').AsInteger := IDVenda;
+    FDQuery1.Open;
+
+    GridItens.RowCount := 1;
+
+    while not FDQuery1.Eof do
+    begin
+      GridItens.RowCount := GridItens.RowCount + 1;
+
+      Linha := GridItens.RowCount - 1;
+
+      GridItens.Cells[0,Linha] :=
+        FDQuery1.FieldByName('PRODUTO_ID').AsString;
+
+      GridItens.Cells[1,Linha] :=
+        FDQuery1.FieldByName('DESCRICAO').AsString;
+
+      GridItens.Cells[2,Linha] :=
+        FDQuery1.FieldByName('QUANTIDADE').AsString;
+
+      GridItens.Cells[3,Linha] :=
+        FormatFloat('0.00',
+        FDQuery1.FieldByName('PRECO').AsFloat);
+
+      GridItens.Cells[4,Linha] :=
+        FormatFloat('0.00',
+        FDQuery1.FieldByName('TOTAL').AsFloat);
+
+      FDQuery1.Next;
+    end;
+
+  end;
+
 end;
 
 end.

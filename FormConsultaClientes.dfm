@@ -16,11 +16,18 @@ object TelaConsultaCliente: TTelaConsultaCliente
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   TextHeight = 15
+  object Label1: TLabel
+    Left = 16
+    Top = 8
+    Width = 93
+    Height = 15
+    Caption = 'Pesquisar Cliente:'
+  end
   object DBGrid1: TDBGrid
     Left = 0
-    Top = 8
+    Top = 29
     Width = 625
-    Height = 433
+    Height = 417
     DataSource = DataSource1
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
@@ -53,6 +60,14 @@ object TelaConsultaCliente: TTelaConsultaCliente
         Title.Caption = 'Cidade'
         Visible = True
       end>
+  end
+  object EditConsultaCliente: TEdit
+    Left = 119
+    Top = 5
+    Width = 242
+    Height = 23
+    TabOrder = 1
+    OnChange = EditConsultaClienteChange
   end
   object FDQueryClientes: TFDQuery
     Connection = FDConnection1

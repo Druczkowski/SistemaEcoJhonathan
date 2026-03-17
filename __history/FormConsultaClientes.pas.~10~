@@ -1,0 +1,63 @@
+unit FormConsultaClientes;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys,
+  FireDAC.Phys.FB, FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait;
+
+type
+  TTelaConsultaCliente = class(TForm)
+    DBGrid1: TDBGrid;
+    FDQueryClientes: TFDQuery;
+    DataSource1: TDataSource;
+    FDConnection1: TFDConnection;
+    procedure FormShow(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    PermitirEdicao: Boolean;
+  end;
+
+var
+  TelaConsultaCliente: TTelaConsultaCliente;
+
+implementation
+
+{$R *.dfm}
+
+procedure TTelaConsultaCliente.DBGrid1DblClick(Sender: TObject);
+begin
+   ModalResult := mrOk;
+end;
+
+procedure TTelaConsultaCliente.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  if ModalResult = mrNone then
+    ModalResult := mrCancel;
+end;
+
+procedure TTelaConsultaCliente.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TTelaConsultaCliente.FormShow(Sender: TObject);
+begin
+  FDQueryClientes.Open;
+  DBGrid1.Columns[1].Width := 150;
+  DBGrid1.ReadOnly := not PermitirEdicao;
+end;
+
+end.

@@ -17,10 +17,13 @@ type
     FDQueryClientes: TFDQuery;
     DataSource1: TDataSource;
     FDConnection1: TFDConnection;
+    EditConsultaCliente: TEdit;
+    Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EditConsultaClienteChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,6 +40,18 @@ implementation
 procedure TTelaConsultaCliente.DBGrid1DblClick(Sender: TObject);
 begin
    ModalResult := mrOk;
+end;
+
+procedure TTelaConsultaCliente.EditConsultaClienteChange(Sender: TObject);
+begin
+  FDQueryClientes.Close;
+  FDQueryClientes.SQL.Text :=
+    'SELECT * FROM CLIENTES WHERE NOME LIKE :NOME';
+
+  FDQueryClientes.ParamByName('NOME').AsString :=
+    '%' + EditConsultaCliente.Text + '%';
+
+  FDQueryClientes.Open;
 end;
 
 procedure TTelaConsultaCliente.FormClose(Sender: TObject;

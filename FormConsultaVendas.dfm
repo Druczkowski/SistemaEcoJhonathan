@@ -28,6 +28,7 @@ object TelaConsultaVendas: TTelaConsultaVendas
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
     OnCellClick = DBGrid1CellClick
+    OnDblClick = DBGrid1DblClick
     Columns = <
       item
         Expanded = False

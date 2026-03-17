@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.FB,
   FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, Vcl.Grids, Vcl.DBGrids,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls;
 
 type
   TTelaConsultaProduto = class(TForm)
@@ -21,9 +21,12 @@ type
     FDQueryProdutosDESCRICAO: TStringField;
     FDQueryProdutosPRECO_VENDA: TFMTBCDField;
     FDQueryProdutosUNIDADE: TStringField;
+    Label1: TLabel;
+    EditConsultaProduto: TEdit;
     procedure FormShow(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EditConsultaProdutoChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -40,6 +43,18 @@ implementation
 procedure TTelaConsultaProduto.DBGrid1DblClick(Sender: TObject);
 begin
   ModalResult := mrOk;
+end;
+
+procedure TTelaConsultaProduto.EditConsultaProdutoChange(Sender: TObject);
+begin
+  FDQueryProdutos.Close;
+  FDQueryProdutos.SQL.Text :=
+    'SELECT * FROM PRODUTOS WHERE DESCRICAO LIKE :DESCRICAO';
+
+  FDQueryProdutos.ParamByName('DESCRICAO').AsString :=
+    '%' + EditConsultaProduto.Text + '%';
+
+  FDQueryProdutos.Open;
 end;
 
 procedure TTelaConsultaProduto.FormKeyDown(Sender: TObject; var Key: Word;
