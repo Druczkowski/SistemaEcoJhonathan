@@ -163,6 +163,7 @@ begin
   CalcularTotal;
 
   EditProduto.Text := '';
+  EditProdutoNome.Text := '';
   EditQtdade.Text  := '';
   EditPreco.Text   := '';
 
