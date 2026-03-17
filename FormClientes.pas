@@ -28,6 +28,8 @@ type
     ButtonFecharCli: TButton;
     ComboBoxPFPJ: TComboBox;
     Label1: TLabel;
+    ComboBoxUF: TComboBox;
+    LabelUF: TLabel;
     procedure ButtonSalvarCliClick(Sender: TObject);
     procedure ButtonFecharCliClick(Sender: TObject);
     procedure ComboBoxPFPJChange(Sender: TObject);
@@ -196,13 +198,14 @@ begin
   end;
 
   FDQuery1.SQL.Clear;
-  FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE, TIPO_PESSOA)');
-  FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE, :TIPO_PESSOA)');
+  FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE, TIPO_PESSOA, UF)');
+  FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE, :TIPO_PESSOA, :UF)');
 
   FDQuery1.ParamByName('NOME').AsString := EditNomeCliente.Text;
   FDQuery1.ParamByName('DOCUMENTO').AsString := EditDocumento.Text;
   FDQuery1.ParamByName('CIDADE').AsString := EditCidade.Text;
   FDQuery1.ParamByName('TIPO_PESSOA').AsInteger := ComboboxPFPJ.ItemIndex;
+  FDQuery1.ParamByName('UF').AsString := ComboBoxUF.Text;
 
   FDQuery1.ExecSQL;
 

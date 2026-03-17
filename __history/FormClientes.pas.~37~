@@ -12,7 +12,7 @@ uses
   FireDAC.Phys.FB, FireDAC.Phys.FBDef;
 
   function ValidarCPF(CPF: string): Boolean;
-  function ValidarCNPJ(CPF: string): Boolean;
+  function ValidarCNPJ(CNPJ: string): Boolean;
 
 type
   TTelaCadClientes = class(TForm)
@@ -28,9 +28,13 @@ type
     ButtonFecharCli: TButton;
     ComboBoxPFPJ: TComboBox;
     Label1: TLabel;
+    ComboBoxUF: TComboBox;
+    LabelUF: TLabel;
     procedure ButtonSalvarCliClick(Sender: TObject);
     procedure ButtonFecharCliClick(Sender: TObject);
     procedure ComboBoxPFPJChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -134,6 +138,7 @@ begin
   EditNomeCliente.Text := '';
   EditDocumento.Text := '';
   EditCidade.Text := '';
+  ComboBoxPFPJ.ItemIndex := 0;
   Close;
 end;
 
@@ -193,12 +198,13 @@ begin
   end;
 
   FDQuery1.SQL.Clear;
-  FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE)');
-  FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE)');
+  FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE, TIPO_PESSOA)');
+  FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE, :TIPO_PESSOA)');
 
   FDQuery1.ParamByName('NOME').AsString := EditNomeCliente.Text;
   FDQuery1.ParamByName('DOCUMENTO').AsString := EditDocumento.Text;
   FDQuery1.ParamByName('CIDADE').AsString := EditCidade.Text;
+  FDQuery1.ParamByName('TIPO_PESSOA').AsInteger := ComboboxPFPJ.ItemIndex;
 
   FDQuery1.ExecSQL;
 
@@ -226,6 +232,23 @@ if ComboboxPFPJ.Text = 'PJ' then
 
 if ComboboxPFPJ.Text = 'EXTERIOR' then
   LabelDocumento.Caption := 'Documento:';
+end;
+
+procedure TTelaCadClientes.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    begin
+      EditNomeCliente.Text := '';
+      EditDocumento.Text := '';
+      EditCidade.Text := '';
+      Close;
+    end;
+end;
+
+procedure TTelaCadClientes.FormShow(Sender: TObject);
+begin
+  ComboBoxPFPJ.ItemIndex := 0;
 end;
 
 end.

@@ -12,7 +12,7 @@ uses
   FireDAC.Phys.FB, FireDAC.Phys.FBDef;
 
   function ValidarCPF(CPF: string): Boolean;
-  function ValidarCNPJ(CPF: string): Boolean;
+  function ValidarCNPJ(CNPJ: string): Boolean;
 
 type
   TTelaCadClientes = class(TForm)
@@ -31,6 +31,8 @@ type
     procedure ButtonSalvarCliClick(Sender: TObject);
     procedure ButtonFecharCliClick(Sender: TObject);
     procedure ComboBoxPFPJChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -45,6 +47,56 @@ implementation
 {$R *.dfm}
 
 uses FormConsultaClientes;
+
+function ValidarCNPJ(CNPJ: string): Boolean;
+var
+  i, Soma, Resto: Integer;
+  Num: string;
+  Peso1, Peso2: array[1..13] of Integer;
+begin
+  Result := False;
+
+  Num := StringReplace(CNPJ,'.','',[rfReplaceAll]);
+  Num := StringReplace(Num,'-','',[rfReplaceAll]);
+  Num := StringReplace(Num,'/','',[rfReplaceAll]);
+
+  if Length(Num) <> 14 then Exit;
+
+  Peso1[1] := 5; Peso1[2] := 4; Peso1[3] := 3; Peso1[4] := 2;
+  Peso1[5] := 9; Peso1[6] := 8; Peso1[7] := 7; Peso1[8] := 6;
+  Peso1[9] := 5; Peso1[10] := 4; Peso1[11] := 3; Peso1[12] := 2;
+
+  Soma := 0;
+  for i := 1 to 12 do
+    Soma := Soma + StrToInt(Num[i]) * Peso1[i];
+
+  Resto := Soma mod 11;
+  if Resto < 2 then
+    Resto := 0
+  else
+    Resto := 11 - Resto;
+
+  if Resto <> StrToInt(Num[13]) then Exit;
+
+  Peso2[1] := 6; Peso2[2] := 5; Peso2[3] := 4; Peso2[4] := 3;
+  Peso2[5] := 2; Peso2[6] := 9; Peso2[7] := 8; Peso2[8] := 7;
+  Peso2[9] := 6; Peso2[10] := 5; Peso2[11] := 4; Peso2[12] := 3;
+  Peso2[13] := 2;
+
+  Soma := 0;
+  for i := 1 to 13 do
+    Soma := Soma + StrToInt(Num[i]) * Peso2[i];
+
+  Resto := Soma mod 11;
+  if Resto < 2 then
+    Resto := 0
+  else
+    Resto := 11 - Resto;
+
+  if Resto <> StrToInt(Num[14]) then Exit;
+
+  Result := True;
+end;
 
 function ValidarCPF(CPF: string): Boolean;
 var
@@ -84,6 +136,7 @@ begin
   EditNomeCliente.Text := '';
   EditDocumento.Text := '';
   EditCidade.Text := '';
+  ComboBoxPFPJ.ItemIndex := 0;
   Close;
 end;
 
@@ -143,12 +196,13 @@ begin
   end;
 
   FDQuery1.SQL.Clear;
-  FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE)');
-  FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE)');
+  FDQuery1.SQL.Add('INSERT INTO CLIENTES (NOME, DOCUMENTO, CIDADE, TIPO_PESSOA)');
+  FDQuery1.SQL.Add('VALUES (:NOME, :DOCUMENTO, :CIDADE, :TIPO_PESSOA)');
 
   FDQuery1.ParamByName('NOME').AsString := EditNomeCliente.Text;
   FDQuery1.ParamByName('DOCUMENTO').AsString := EditDocumento.Text;
   FDQuery1.ParamByName('CIDADE').AsString := EditCidade.Text;
+  FDQuery1.ParamByName('TIPO_PESSOA').AsInteger := ComboboxPFPJ.ItemIndex;
 
   FDQuery1.ExecSQL;
 
@@ -178,55 +232,21 @@ if ComboboxPFPJ.Text = 'EXTERIOR' then
   LabelDocumento.Caption := 'Documento:';
 end;
 
-function ValidarCNPJ(CNPJ: string): Boolean;
-var
-  i, Soma, Resto: Integer;
-  Num: string;
-  Peso1, Peso2: array[1..13] of Integer;
+procedure TTelaCadClientes.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
 begin
-  Result := False;
-
-  Num := StringReplace(CNPJ,'.','',[rfReplaceAll]);
-  Num := StringReplace(Num,'-','',[rfReplaceAll]);
-  Num := StringReplace(Num,'/','',[rfReplaceAll]);
-
-  if Length(Num) <> 14 then Exit;
-
-  Peso1[1] := 5; Peso1[2] := 4; Peso1[3] := 3; Peso1[4] := 2;
-  Peso1[5] := 9; Peso1[6] := 8; Peso1[7] := 7; Peso1[8] := 6;
-  Peso1[9] := 5; Peso1[10] := 4; Peso1[11] := 3; Peso1[12] := 2;
-
-  Soma := 0;
-  for i := 1 to 12 do
-    Soma := Soma + StrToInt(Num[i]) * Peso1[i];
-
-  Resto := Soma mod 11;
-  if Resto < 2 then
-    Resto := 0
-  else
-    Resto := 11 - Resto;
-
-  if Resto <> StrToInt(Num[13]) then Exit;
-
-  Peso2[1] := 6; Peso2[2] := 5; Peso2[3] := 4; Peso2[4] := 3;
-  Peso2[5] := 2; Peso2[6] := 9; Peso2[7] := 8; Peso2[8] := 7;
-  Peso2[9] := 6; Peso2[10] := 5; Peso2[11] := 4; Peso2[12] := 3;
-  Peso2[13] := 2;
-
-  Soma := 0;
-  for i := 1 to 13 do
-    Soma := Soma + StrToInt(Num[i]) * Peso2[i];
-
-  Resto := Soma mod 11;
-  if Resto < 2 then
-    Resto := 0
-  else
-    Resto := 11 - Resto;
-
-  if Resto <> StrToInt(Num[14]) then Exit;
-
-  Result := True;
+  if Key = VK_ESCAPE then
+    begin
+      EditNomeCliente.Text := '';
+      EditDocumento.Text := '';
+      EditCidade.Text := '';
+      Close;
+    end;
 end;
 
+procedure TTelaCadClientes.FormShow(Sender: TObject);
+begin
+  ComboBoxPFPJ.ItemIndex := 0;
+end;
 
 end.

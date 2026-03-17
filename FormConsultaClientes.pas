@@ -72,6 +72,7 @@ procedure TTelaConsultaCliente.FormShow(Sender: TObject);
 begin
   FDQueryClientes.Open;
   DBGrid1.Columns[1].Width := 150;
+  DBGrid1.Columns[3].Width := 150;
   DBGrid1.ReadOnly := not PermitirEdicao;
 end;
 

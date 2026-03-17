@@ -4,7 +4,7 @@ object TelaCadClientes: TTelaCadClientes
   BorderStyle = bsDialog
   Caption = 'Clientes'
   ClientHeight = 163
-  ClientWidth = 538
+  ClientWidth = 517
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,49 +16,56 @@ object TelaCadClientes: TTelaCadClientes
   OnShow = FormShow
   TextHeight = 15
   object LabelNomeCliente: TLabel
-    Left = 32
+    Left = 10
     Top = 43
     Width = 36
     Height = 15
     Caption = 'Nome:'
   end
   object LabelDocumento: TLabel
-    Left = 250
+    Left = 156
     Top = 43
     Width = 66
     Height = 15
     Caption = 'Documento:'
   end
   object LabelCidade: TLabel
-    Left = 384
+    Left = 298
     Top = 43
     Width = 40
     Height = 15
     Caption = 'Cidade:'
   end
   object Label1: TLabel
-    Left = 169
-    Top = 43
+    Left = 8
+    Top = 8
     Width = 26
     Height = 15
     Caption = 'Tipo:'
   end
+  object LabelUF: TLabel
+    Left = 441
+    Top = 43
+    Width = 17
+    Height = 15
+    Caption = 'UF:'
+  end
   object EditNomeCliente: TEdit
-    Left = 32
+    Left = 10
     Top = 64
     Width = 121
     Height = 23
     TabOrder = 0
   end
   object EditDocumento: TEdit
-    Left = 250
+    Left = 156
     Top = 64
     Width = 121
     Height = 23
     TabOrder = 1
   end
   object EditCidade: TEdit
-    Left = 384
+    Left = 298
     Top = 64
     Width = 121
     Height = 23
@@ -83,9 +90,9 @@ object TelaCadClientes: TTelaCadClientes
     OnClick = ButtonFecharCliClick
   end
   object ComboBoxPFPJ: TComboBox
-    Left = 169
-    Top = 64
-    Width = 73
+    Left = 40
+    Top = 8
+    Width = 121
     Height = 23
     TabOrder = 5
     OnChange = ComboBoxPFPJChange
@@ -93,6 +100,43 @@ object TelaCadClientes: TTelaCadClientes
       'PF'
       'PJ'
       'EXTERIOR')
+  end
+  object ComboBoxUF: TComboBox
+    Left = 441
+    Top = 64
+    Width = 50
+    Height = 23
+    ItemIndex = 15
+    TabOrder = 6
+    Text = 'PR'
+    Items.Strings = (
+      'AC'
+      'AL'
+      'AP'
+      'AM'
+      'BA'
+      'CE'
+      'DF'
+      'ES'
+      'GO'
+      'MA'
+      'MT'
+      'MS'
+      'MG'
+      'PA'
+      'PB'
+      'PR'
+      'PE'
+      'PI'
+      'RJ'
+      'RN'
+      'RS'
+      'RO'
+      'RR'
+      'SC'
+      'SP'
+      'SE'
+      'TO')
   end
   object FDQuery1: TFDQuery
     Connection = FDConnection1
@@ -111,6 +155,7 @@ object TelaCadClientes: TTelaCadClientes
       'User_Name=sysdba'
       'Server=localhost'
       'OSAuthent=No')
+    Connected = True
     LoginPrompt = False
     Left = 120
     Top = 104

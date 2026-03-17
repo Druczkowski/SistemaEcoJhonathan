@@ -59,6 +59,11 @@ object TelaConsultaCliente: TTelaConsultaCliente
         FieldName = 'CIDADE'
         Title.Caption = 'Cidade'
         Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'UF'
+        Visible = True
       end>
   end
   object EditConsultaCliente: TEdit
@@ -72,7 +77,7 @@ object TelaConsultaCliente: TTelaConsultaCliente
   object FDQueryClientes: TFDQuery
     Connection = FDConnection1
     SQL.Strings = (
-      'SELECT ID, NOME, DOCUMENTO, CIDADE'
+      'SELECT ID, NOME, DOCUMENTO, CIDADE, UF'
       'FROM CLIENTES'
       'ORDER BY NOME')
     Left = 240

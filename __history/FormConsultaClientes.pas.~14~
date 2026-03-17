@@ -17,12 +17,17 @@ type
     FDQueryClientes: TFDQuery;
     DataSource1: TDataSource;
     FDConnection1: TFDConnection;
+    EditConsultaCliente: TEdit;
+    Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EditConsultaClienteChange(Sender: TObject);
   private
     { Private declarations }
   public
-    { Public declarations }
+    PermitirEdicao: Boolean;
   end;
 
 var
@@ -37,9 +42,37 @@ begin
    ModalResult := mrOk;
 end;
 
+procedure TTelaConsultaCliente.EditConsultaClienteChange(Sender: TObject);
+begin
+  FDQueryClientes.Close;
+  FDQueryClientes.SQL.Text :=
+    'SELECT * FROM CLIENTES WHERE NOME LIKE :NOME';
+
+  FDQueryClientes.ParamByName('NOME').AsString :=
+    '%' + EditConsultaCliente.Text + '%';
+
+  FDQueryClientes.Open;
+end;
+
+procedure TTelaConsultaCliente.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  if ModalResult = mrNone then
+    ModalResult := mrCancel;
+end;
+
+procedure TTelaConsultaCliente.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
+end;
+
 procedure TTelaConsultaCliente.FormShow(Sender: TObject);
 begin
   FDQueryClientes.Open;
+  DBGrid1.Columns[1].Width := 150;
+  DBGrid1.ReadOnly := not PermitirEdicao;
 end;
 
 end.
